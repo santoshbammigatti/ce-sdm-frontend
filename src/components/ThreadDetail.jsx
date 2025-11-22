@@ -3,7 +3,7 @@ import { api } from "../api/client";
 import SummaryPanel from "./SummaryPanel";
 import Toast from "./Toast";
 
-export default function ThreadDetail({ threadId }) {
+export default function ThreadDetail({ threadId, llmToken }) {
   const [thread, setThread] = useState(null);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ export default function ThreadDetail({ threadId }) {
       <SummaryPanel
         summary={summary}
         onNeedSummarize={async () => {
-          const s = await api.summarize(threadId);
+          const s = await api.summarize(threadId, llmToken);
           setSummary(s);
         }}
         onSaveEdit={async (edited_summary, edited_fields) => {

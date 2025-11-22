@@ -24,6 +24,7 @@ export default function App() {
     onConfirm: null,
   });
   const [toastMessage, setToastMessage] = useState("");
+  const [llmToken, setLlmToken] = useState("");
 
   // Load thread list once on mount
   useEffect(() => {
@@ -120,6 +121,20 @@ export default function App() {
             Reset ALL
           </button>
 
+          {/* LLM Token Input */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: 16 }}>
+            <label htmlFor="llm-token" style={{ fontSize: 14, fontWeight: 500 }}>LLM Token:</label>
+            <input
+              id="llm-token"
+              type="password"
+              className="input"
+              style={{ width: 200 }}
+              placeholder="Enter LLM token"
+              value={llmToken}
+              onChange={e => setLlmToken(e.target.value)}
+            />
+          </div>
+
           <div style={{ marginLeft: "auto" }}>
             <small className="mono">
               API: {import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"}
@@ -130,7 +145,7 @@ export default function App() {
         {/* Content */}
         <div className="content">
           {selectedId ? (
-            <ThreadDetail threadId={selectedId} />
+            <ThreadDetail threadId={selectedId} llmToken={llmToken} />
           ) : (
             <div className="panel">Select a thread on the left.</div>
           )}

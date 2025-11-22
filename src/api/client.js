@@ -10,6 +10,11 @@ async function http(method, path, body) {
   };
   if (body) opts.body = JSON.stringify(body);
 
+  // Debug log
+  if (path === "/api/summarize") {
+    console.log("🔍 Sending summarize request with body:", body);
+  }
+
   const res = await fetch(`${API_BASE}${path}`, opts);
   // Try to parse JSON; if HTML arrives (e.g., debug errors), throw a readable error
   const text = await res.text();
@@ -30,21 +35,21 @@ export const api = {
   getThread: (threadId) =>
     http("GET", `/api/threads/${encodeURIComponent(threadId)}/`),
   getSummary: (threadId) =>
-    http("GET", `/api/summary/${encodeURIComponent(threadId)}`),
-  summarize: (threadId) =>
-    http("POST", "/api/summarize", { thread_id: threadId }),
+    http("GET", `/api/threads/${encodeURIComponent(threadId)}/summary/`),
+  summarize: (threadId, llmToken) =>
+    http("POST", "/api/summarize/", { thread_id: threadId, ...(llmToken && { llm_token: llmToken }) }),
   saveEdit: (threadId, edited_summary, edited_fields) =>
-    http("POST", `/api/summary/${encodeURIComponent(threadId)}/save-edit`, {
+    http("POST", `/api/threads/${encodeURIComponent(threadId)}/save-edit/`, {
       edited_summary,
       edited_fields,
     }),
   approve: (threadId, approver) =>
-    http("POST", `/api/summary/${encodeURIComponent(threadId)}/approve`, {
+    http("POST", `/api/threads/${encodeURIComponent(threadId)}/approve/`, {
       approver,
     }),
   postCrmNote: (threadId, note, metadata = {}) =>
-    http("POST", "/api/crm/post-note", { thread_id: threadId, note, metadata }),
-  adminResetAll: () => http("POST", "/api/admin/reset", {}),
+    http("POST", "/api/crm-note/", { thread_id: threadId, note, metadata }),
+  adminResetAll: () => http("POST", "/api/admin-reset/", {}),
   adminResetOne: (threadId) =>
-    http("POST", "/api/admin/reset", { thread_id: threadId }),
+    http("POST", "/api/admin-reset/", { thread_id: threadId }),
 };
