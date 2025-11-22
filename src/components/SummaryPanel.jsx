@@ -85,7 +85,7 @@ export default function SummaryPanel({
 
           {/* Faithfulness warnings (if you add them later) */}
           {effectiveFields?.faithfulness_warnings?.length ? (
-            <div className="row" style={{ background: "#2b1d07", border: "1px solid #a16207", padding: 8, borderRadius: 6 }}>
+            <div className="row warning-box">
               <b>Check before approval:</b>
               <ul>
                 {effectiveFields.faithfulness_warnings.map((w, i) => <li key={i}>{w}</li>)}

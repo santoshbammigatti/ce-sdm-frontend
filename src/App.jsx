@@ -5,6 +5,7 @@ import ThreadDetail from "./components/ThreadDetail";
 import Modal from "./components/Modal";
 import Toast from "./components/Toast";
 import Spinner from "./components/Spinner";
+import ThemeToggle from "./components/ThemeToggle";
 import "./index.css";
 
 /**
@@ -141,10 +142,11 @@ export default function App() {
             />
           </div>
 
-          <div style={{ marginLeft: "auto" }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
             <small className="mono">
               API: {import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"}
             </small>
+            <ThemeToggle />
           </div>
         </div>
 

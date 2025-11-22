@@ -10,10 +10,11 @@ It talks to the Django/DRF backend you set up in the companion repo.
 
 ## 1) Stack (what & why)
 
-- **React 18** (functional components, hooks)
+- **React 18** (functional components, hooks, Context API)
 - **Vite** (fast dev server & build)
-- **Plain CSS** (no framework; simple, dark theme)
+- **Plain CSS** (no framework; dark/light theme with CSS variables)
 - **Fetch API** (centralized in `src/api/client.js`)
+- **Theme System** (localStorage + system preference detection)
 
 Project layout:
 ```
@@ -24,10 +25,17 @@ src/
     ThreadList.jsx     # left pane list of threads
     ThreadDetail.jsx   # messages panel + wires to summary panel
     SummaryPanel.jsx   # summarize → edit → approve → post-to-CRM
+    Spinner.jsx        # elegant loading spinner component
+    ThemeToggle.jsx    # dark/light mode toggle button
+    Modal.jsx          # confirmation dialogs
+    Toast.jsx          # notification toasts
+  context/
+    ThemeContext.jsx   # theme state management
   App.jsx              # app shell + toolbar (Refresh / Reset)
-  main.jsx             # bootstrap
-  index.css            # minimal styling
-.env.local             # VITE_API_BASE_URL=http://localhost:8000
+  main.jsx             # bootstrap with ThemeProvider
+  index.css            # theming with CSS variables
+.env.development       # VITE_API_BASE_URL=http://localhost:8000
+.env.production        # VITE_API_BASE_URL=https://web-production-432b.up.railway.app
 ```
 
 ---
