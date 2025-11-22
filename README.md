@@ -35,7 +35,7 @@ src/
 ## 2) Prerequisites
 
 - Node.js 18+
-- The **backend** running locally (default: `http://localhost:8000`).
+- The **backend** running locally (default: `http://localhost:8000`) or on Railway.
 - CORS enabled on backend (dev):
   ```python
   # config/settings.py
@@ -52,18 +52,45 @@ npm create vite@latest ce-sdm-frontend -- --template react
 cd ce-sdm-frontend
 npm install
 
-# set API base URL used by the UI
-cp .env.local .env.local.example 2>/dev/null || true
-printf "VITE_API_BASE_URL=http://localhost:8000\n" > .env.local
+# Copy example environment file
+cp .env.example .env
+
+# For local development (default):
+# .env will use: VITE_API_BASE_URL=http://localhost:8000
+
+# For Railway production:
+# Edit .env and set: VITE_API_BASE_URL=https://web-production-432b.up.railway.app
 
 # start
 npm run dev
 # → http://localhost:5173
 ```
 
-If your backend is at a different origin, update `.env.local`:
-```ini
-VITE_API_BASE_URL=https://your-api.onrender.com
+### Environment Configuration
+
+This project uses different environment files for different scenarios:
+
+- **`.env.development`** - Used automatically in development mode (`npm run dev`)
+  - Points to localhost: `http://localhost:8000`
+  
+- **`.env.production`** - Used automatically in production build (`npm run build`)
+  - Points to Railway: `https://web-production-432b.up.railway.app`
+  
+- **`.env.example`** - Template file (commit to git)
+  - Copy this to `.env` to customize your local setup
+
+- **`.env`** or **`.env.local`** - Override for local development (not committed to git)
+  - Create this file to override the default settings
+
+To switch between backends:
+```bash
+# Option 1: Edit .env file
+VITE_API_BASE_URL=http://localhost:8000              # for local
+VITE_API_BASE_URL=https://web-production-432b.up.railway.app  # for Railway
+
+# Option 2: Let Vite use the default environment files
+npm run dev      # uses .env.development (localhost)
+npm run build    # uses .env.production (Railway)
 ```
 
 ---

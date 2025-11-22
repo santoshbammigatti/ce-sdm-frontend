@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import SummaryPanel from "./SummaryPanel";
 import Toast from "./Toast";
+import Spinner from "./Spinner";
 
 export default function ThreadDetail({ threadId, llmToken }) {
   const [thread, setThread] = useState(null);
@@ -45,9 +46,9 @@ export default function ThreadDetail({ threadId, llmToken }) {
           <span className="label" style={{ marginLeft: 12 }}>Product:</span><span>{thread?.product}</span>
         </div>
         <h4>Messages</h4>
-        {loading && <div>Loading…</div>}
+        {loading && <Spinner size="small" text="Loading thread..." />}
         {err && <div style={{ color: "tomato" }}>{err}</div>}
-        <div>
+        {!loading && <div>
           {thread?.messages?.map(m => (
             <div key={m.id} className="msg">
               <div>
@@ -56,11 +57,12 @@ export default function ThreadDetail({ threadId, llmToken }) {
               <div>{m.body}</div>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
 
       <SummaryPanel
         summary={summary}
+        loading={loading}
         onNeedSummarize={async () => {
           const s = await api.summarize(threadId, llmToken);
           setSummary(s);

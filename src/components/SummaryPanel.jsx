@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useEffect } from "react";
 import Toast from "./Toast";
+import Spinner from "./Spinner";
 
 function FieldRow({ label, children }) {
   return (
@@ -13,9 +14,11 @@ function FieldRow({ label, children }) {
 
 export default function SummaryPanel({
   summary,
+  loading,
   onNeedSummarize, onSaveEdit, onApprove, onPostCrm
 }) {
   const state = summary?.state || "NONE";
+  const [summarizing, setSummarizing] = useState(false);
   
   const draftFields = useMemo(() => summary?.draft_fields || {}, [summary]);
   const editedFields = useMemo(() => summary?.edited_fields || {}, [summary]);
@@ -60,13 +63,18 @@ export default function SummaryPanel({
       <h3 style={{ marginTop: 0 }}>Summary</h3>
 
       {canSummarize && (
-        <button className="btn primary" onClick={async () => {
-          setStatus("Summarizing…");
-          await onNeedSummarize();
-          setStatus("");
-        }}>
-          Generate Draft
-        </button>
+        <>
+          <button className="btn primary" onClick={async () => {
+            setStatus("Summarizing…");
+            setSummarizing(true);
+            await onNeedSummarize();
+            setSummarizing(false);
+            setStatus("");
+          }} disabled={summarizing}>
+            Generate Draft
+          </button>
+          {summarizing && <Spinner size="medium" text="Generating summary..." />}
+        </>
       )}
 
       {summary?.draft_summary && (

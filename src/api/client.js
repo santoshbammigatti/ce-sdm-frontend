@@ -1,5 +1,8 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
+// Log API configuration (helpful for debugging)
+console.log("API Base URL:", API_BASE);
+
 async function http(method, path, body) {
   const opts = {
     method,

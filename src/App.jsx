@@ -4,6 +4,7 @@ import ThreadList from "./components/ThreadList";
 import ThreadDetail from "./components/ThreadDetail";
 import Modal from "./components/Modal";
 import Toast from "./components/Toast";
+import Spinner from "./components/Spinner";
 import "./index.css";
 
 /**
@@ -16,6 +17,7 @@ export default function App() {
   const [threads, setThreads] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [err, setErr] = useState("");
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -95,13 +97,13 @@ export default function App() {
       <div className="sidebar">
         <div className="header">CE Threads</div>
         <div className="list">
-          {loading && <div>Loading…</div>}
+          {loading && <Spinner size="small" text="Loading threads..." />}
           {err && <div className="row" style={{ color: "tomato" }}>{err}</div>}
-          <ThreadList
+          {!loading && <ThreadList
             threads={threads}
             selectedId={selectedId}
             onSelect={setSelectedId}
-          />
+          />}
         </div>
       </div>
 
@@ -109,8 +111,12 @@ export default function App() {
       <div className="main">
         {/* Toolbar */}
         <div className="toolbar">
-          <button className="btn" onClick={() => window.location.reload()}>
-            Refresh
+          <button className="btn" onClick={async () => {
+            setRefreshing(true);
+            await new Promise(resolve => setTimeout(resolve, 300)); // Small delay for UX
+            window.location.reload();
+          }} disabled={refreshing}>
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
 
           {/* NEW: Reset buttons */}
