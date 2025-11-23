@@ -6,6 +6,8 @@ import Modal from "./components/Modal";
 import Toast from "./components/Toast";
 import Spinner from "./components/Spinner";
 import ThemeToggle from "./components/ThemeToggle";
+import UserGuide from "./components/UserGuide";
+import InfoButton from "./components/InfoButton";
 import "./index.css";
 
 /**
@@ -96,7 +98,10 @@ export default function App() {
     <div className="app">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="header">CE Threads</div>
+        <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>CE Threads</span>
+          <UserGuide />
+        </div>
         <div className="list">
           {loading && <Spinner size="small" text="Loading threads..." />}
           {err && <div className="row" style={{ color: "tomato" }}>{err}</div>}
@@ -128,17 +133,43 @@ export default function App() {
             Reset ALL
           </button>
 
-          {/* LLM Token Input */}
+          {/* Groq API Key Input */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: 16 }}>
-            <label htmlFor="llm-token" style={{ fontSize: 14, fontWeight: 500 }}>LLM Token:</label>
+            <label htmlFor="llm-token" style={{ fontSize: 14, fontWeight: 500 }}>Groq API Key:</label>
             <input
               id="llm-token"
               type="password"
               className="input"
               style={{ width: 200 }}
-              placeholder="Enter LLM token"
+              placeholder="Enter API Key"
               value={llmToken}
               onChange={e => setLlmToken(e.target.value)}
+            />
+            <InfoButton 
+              title="API Key Information"
+              content={
+                <div>
+                  <p><strong>With API Key:</strong></p>
+                  <ul style={{ marginTop: 4, marginBottom: 8, paddingLeft: 20 }}>
+                    <li>Generate AI-powered summaries</li>
+                    <li>Intelligent issue detection</li>
+                    <li>Recommended actions</li>
+                    <li>Free tier: 30 requests/minute</li>
+                  </ul>
+                  <p><strong>Without API Key:</strong></p>
+                  <ul style={{ marginTop: 4, marginBottom: 8, paddingLeft: 20, fontSize: '12px' }}>
+                    <li>Deterministic keyword matching fallback</li>
+                    <li>Basic summary generation available</li>
+                    <li>Can view and edit existing summaries</li>
+                  </ul>
+                  <p style={{ marginTop: 8, fontSize: '12px' }}>
+                    <strong>Get a free API key:</strong><br/>
+                    <a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)' }}>
+                      https://console.groq.com/
+                    </a>
+                  </p>
+                </div>
+              }
             />
           </div>
 
